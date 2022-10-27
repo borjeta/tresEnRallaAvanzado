@@ -3,30 +3,94 @@ let fichas = ["O", "X"];
 let puestas = 0;
 let partidaAcabada = false;
 let textoVictoria = document.getElementById("textoVictoria");
-let botones = Array.from(document.getElementsByName("botonesJuego"));
+//Botones menú
+let btnIniciar = document.getElementById("iniciar");
 let btnReiniciar = document.getElementById("resetGame");
-let tablero = document.getElementById("tablero").style.visibility = "hidden";
+let btnReset = document.getElementById("reset");
+let btnMuestraDatos = document.getElementById("muestraDatos");
+let btnGuardaDatos = document.getElementById("guardarDatos");
+let btnCargarDatos = document.getElementById("cargarDatos");
+let btnSalir = document.getElementById("salir");
+
+let tablero = (document.getElementById("tablero").style.visibility = "hidden");
+let partidasJugadas = 0;
+let puntosJugador = 0;
+let empates = 0;
+let botones = Array.from(document.getElementsByName("botonesJuego"));
 
 botones.forEach((x) => x.addEventListener("click", ponerFicha));
 //addEventListener para los botones del menu
 btnReiniciar.addEventListener("click", reiniciarJuego);
+btnReset.addEventListener("click", resetear);
+btnMuestraDatos.addEventListener("click", muestraDatos);
+btnIniciar.addEventListener("click", function () {
+  document.getElementById("tablero").style.visibility = "visible";
+});
+
+//
+btnGuardaDatos.addEventListener("click", function () {
+	if (typeof(Storage) !== "undefined") {
+		// LocalStorage disponible
+		localStorage.setItem("partidasJugadas", partidasJugadas);
+		localStorage.setItem("puntosJugador", puntosJugador);
+		localStorage.setItem("empates", empates);
+		alert("LocalStorage disponible y se han guardado los datos");
+
+	} else {
+		// LocalStorage no soportado en este navegador
+		alert("LocalStorage no disponible , no se ha podido guardar los datos");
+	}
+	
+  localStorage.setItem("partidasJugadas", partidasJugadas);
+  localStorage.setItem("puntosJugador", puntosJugador);
+  localStorage.setItem("empates", empates);
+});
+
+btnCargarDatos.addEventListener("click", function () {
+  partidasJugadas = localStorage.getItem("partidasJugadas");
+  puntosJugador = localStorage.getItem("puntosJugador");
+  empates = localStorage.getItem("empates");
+  document.getElementById("puntosJugador").innerHTML = puntosJugador;
+  document.getElementById("partidasJugadas").innerHTML = partidasJugadas;
+  document.getElementById("empates").innerHTML = empates;
+});
+
+btnSalir.addEventListener("click", function () {
+  localStorage.clear();
+  window.open("", "_self", "");
+  window.close();
+});
+
+//Funcion para muestraDatos
+function muestraDatos() {
+  let datos = document.getElementById("datos");
+  // si esta oculto lo muestra y si esta visible lo oculta
+  if (datos.style.visibility == "hidden") {
+    datos.style.visibility = "visible";
+  } else {
+    datos.style.visibility = "hidden";
+  }
+} //Funcion para resetear contadores
+function resetear() {
+  partidasJugadas = 0;
+  puntosJugador = 0;
+  empates = 0;
+  document.getElementById("puntosJugador").innerHTML = puntosJugador;
+  document.getElementById("partidasJugadas").innerHTML = partidasJugadas;
+  document.getElementById("empates").innerHTML = empates;
+}
 
 //Funcion para reiniciar el juego
 function reiniciarJuego() {
   textoVictoria.style.visibility = "hidden";
   botones.forEach((x) => {
-	x.innerHTML = "";
-	x.style.backgroundColor = "white";
+    x.innerHTML = "";
+    x.style.backgroundColor = "white";
   });
   partidaAcabada = false;
   puestas = 0;
   turno = 1;
 }
-//Si hacemos click en iniciar juego
-document.getElementById("iniciarJuego").addEventListener("click", function ()  {
-	  document.getElementById("tablero").style.visibility = "visible";
-	});
-
 
 function ponerFicha(event) {
   let botonPulsado = event.target;
@@ -100,20 +164,31 @@ function estado() {
 
   //Comprobamos quien ha ganado
   if (posicionVictoria > 0) {
+    //Si la posicion de victoria es mayor que 0, es que hay ganador
     if (turno == 1) {
       nEstado = 1;
-	  textoVictoria.innerHTML = "Has ganado!";
-	  //Sumamos uno a los puntos del jugador
-	  puntosJugador++;
-	  //Actualizamos el marcador
-	  document.getElementById("puntosJugador").innerHTML = puntosJugador;
-	  //Sumamos uno a las partidas jugadas
-	  partidasJugadas++;
-	  //Actualizamos el marcador
-	  document.getElementById("partidasJugadas").innerHTML = partidasJugadas;
+      textoVictoria.innerHTML = "Has ganado!";
+      //Sumamos uno a los puntos del jugador
+      puntosJugador++;
+      //Actualizamos el marcador
+      document.getElementById("puntosJugador").innerHTML = puntosJugador;
+      //Sumamos uno a las partidas jugadas
+      partidasJugadas++;
+      //Actualizamos el marcador
+      document.getElementById("partidasJugadas").innerHTML = partidasJugadas;
     } else {
       nEstado = -1;
     }
+    //Si no hay ganador, comprobamos si hay empate
+  } else if (puestas == 9) {
+    //Si has perdido, sumamos uno a las partidas jugadas
+    partidasJugadas++;
+    //Actualizamos el marcador
+    document.getElementById("partidasJugadas").innerHTML = partidasJugadas;
+    //Si hay empate, sumamos uno a los empates
+    empates++;
+    //Actualizamos el marcador
+    document.getElementById("empates").innerHTML = empates;
   }
 
   return nEstado;
