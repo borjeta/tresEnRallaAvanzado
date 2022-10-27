@@ -8,27 +8,36 @@
 	<script src="funciones.js" async></script>
 </head>
 <body>
-	<div class="menu">
+	<div class="menu" id="menu">
 		Menú principal
-		<button id="iniciar">Iniciar juego</button>
-		<button id="reset">Resetear contadores</button>
-		<button id="muestraDatos">Mostrar puntuación</button>
-		<button id="resetGame">Reiniciar juego</button>
+	<!-- BotonesMenu-->
+		<button name="iniciar" id = "iniciar">Iniciar juego</button>
+		<button name="reset" id = "reset">Resetear contadores</button>
+		<button name="muestraDatos" id="muestraDatos">Mostrar puntuación</button>
+		<button name="resetGame" id="resetGame">Reiniciar juego</button>
 	  </div>
   
 	<h1>Tres en raya contra la máquina</h1>
 	
+	<!-- Si hacemos click en iniciar muestra los botonesJuego-->
 	<h2 id="textoVictoria">Enhorabuena! Has ganado ! </h2>
 	<div id="tablero">
-		<button></button>
-		<button></button>
-		<button></button>
-		<button></button>
-		<button></button>
-		<button></button>
-		<button></button>
-		<button></button>
-		<button></button>
+		<button name = "botonesJuego"></button>
+		<button name = "botonesJuego"></button>
+		<button name = "botonesJuego"></button>
+		<button name = "botonesJuego"></button>
+		<button name = "botonesJuego"></button>
+		<button name = "botonesJuego"></button>
+		<button name = "botonesJuego"></button>
+		<button name = "botonesJuego"></button>
+		<button name = "botonesJuego"></button>
 	</div>	
+
+	<!-- Si hacemos click en MostrarPuntuacion muestra los datos-->
+	<div id="datos">
+		<p id="puntosJugador">Puntos: </p>
+		<p id="empates">Empates: </p>
+		<p id="partidas">Partidas jugadas: </p>
+	</div>
 </body>
 </html>
